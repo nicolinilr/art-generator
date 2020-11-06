@@ -15,7 +15,7 @@ This project is a simple art description generator. This was developed as a free
 ##Technologies
 Project is created with:
 * Javascript
-* NodeJS v10.19.0
+* NodeJS v14.15.0
 
 ##Setup
 To run this project, install Node locally and run with `node artGenerator.js`
