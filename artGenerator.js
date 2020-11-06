@@ -8,18 +8,7 @@ const verbs = ['petting','shooting','riding','spotting','driving','eating','obey
 const numFirst = Math.ceil(Math.random()*5);
 const numSecond = Math.ceil(Math.random()*5);
 
-//Generate the Adjectives (if any) for each half
-const adjFirstArray = adjectivesGenerator();
-const adjSecondArray = adjectivesGenerator();
-
-//Generate the nouns for both halves of the description
-const firstNoun = nounGenerator(numFirst);
-const secondNoun = nounGenerator(numSecond);
-
-//This artwork depicts [a/#][adjective(s)][nouns(s)] [verb-ing] [a/#][adjective(s)][nouns(s)]. 
-
-
-
+//Function to randomly generate array of 0-3 adjectives
 const adjectivesGenerator = () =>{
     //Flip 3 coins, to generate up to 3 adjectives
     let coinFlips = [Math.random(),Math.random(),Math.random()];
@@ -45,6 +34,7 @@ const adjectivesGenerator = () =>{
     return adjReturn;
 };
 
+//Funtion to randomly generate a noun, and pluralize it if there is more than one
 const nounGenerator = (num) =>{
     //Select the noun in question
     let noun = singularNouns[Math.floor(Math.random()*singularNouns.length)];
@@ -55,4 +45,65 @@ const nounGenerator = (num) =>{
     } else {
         return noun + 's';
     };
-}
+};
+
+//Function to determine participles
+const participleDetermine = (num, noun ,adjectives) =>{
+    const numToWord = ['two','three','four','five'];
+    const vowelArr = ['a','e','i','o','u'];
+    //Checks if there's more than 1. If so that's easy, return a string of the matching number word
+    if (num > 1){
+        return numToWord[num-2];
+    } 
+    //If there's only one, first check if there are any adjectives
+    else if (adjectives.length>0){
+    //If there are, check if the first letter of the first adjective is a vowel, 
+    //and return 'an' or 'a' respectively
+        if (vowelArr.includes(adjectives[0][0])){
+            return 'an';
+        } else {
+            return 'a';
+        };
+    } 
+    //If there are no adjectives, do the same but check the noun's first letter instead
+    else {
+        if(vowelArr.includes(noun[0])){
+            return 'an';
+        } else {
+            return 'a';
+        };
+    };
+};
+
+//Generate the Adjectives (if any) for each half
+const firstAdjArray = adjectivesGenerator();
+const secondAdjArray = adjectivesGenerator();
+
+//Generate the nouns for both halves of the description
+const firstNoun = nounGenerator(numFirst);
+const secondNoun = nounGenerator(numSecond);
+
+//Generate the verb
+const verb = verbs[Math.floor(Math.random()*verbs.length)];
+
+//Determine the first participle for each noun/adjective
+const firstParticiple = participleDetermine(numFirst,firstNoun,firstAdjArray);
+const secondParticiple = participleDetermine(numSecond,secondNoun,secondAdjArray);
+
+//Combine the adjectives into a single string each, to insert into the sentence
+//Initialize empty strings
+let firstAdjectivesCombined = '';
+let secondAdjectivesCombined = '';
+//Add each adjective one at a time in order, with a space after each
+firstAdjArray.forEach(elem =>{ firstAdjectivesCombined = firstAdjectivesCombined + elem + ' '});
+secondAdjArray.forEach(elem =>{ secondAdjectivesCombined = secondAdjectivesCombined + elem + ' '});
+
+//Now finally to create out artwork description!
+
+const artDesc = `This artwork depicts ${firstParticiple} ${firstAdjectivesCombined}${firstNoun} ${verb} ${secondParticiple} ${secondAdjectivesCombined}${secondNoun}.`
+console.log(artDesc);
+
+//This artwork depicts [a/#][adjective(s)][nouns(s)] [verb-ing] [a/#][adjective(s)][nouns(s)]. 
+
+
+
